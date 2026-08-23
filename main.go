@@ -21,7 +21,7 @@ func checkError(err error) {
 }
 
 func handleInquiry(c *gin.Context) {
-	wiiNos := c.Query("chkno")
+	wiiNos := c.PostForm("chkno")
 
 	wiiNoSplit := strings.Split(wiiNos, ",")
 
