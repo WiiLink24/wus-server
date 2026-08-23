@@ -20,7 +20,7 @@ func checkError(err error) {
 	}
 }
 
-func handleRequest(c *gin.Context) {
+func handleInquiry(c *gin.Context) {
 	wiiNos := c.Query("chkno")
 
 	wiiNoSplit := strings.Split(wiiNos, ",")
@@ -31,6 +31,13 @@ func handleRequest(c *gin.Context) {
 	// Return a 1 for every Wii Number, this tells the game that all Wii Numbers are registered
 	// TODO: Implement properly
 	c.String(http.StatusOK, strings.Repeat("1", len(wiiNoSplit)))
+}
+
+func handleNotify(c *gin.Context) {
+	c.Header("X-Wus-Host", config.WUSHost)
+	c.Header("X-Result", "001")
+
+	c.Status(http.StatusOK)
 }
 
 func main() {
@@ -47,7 +54,8 @@ func main() {
 
 	r := gin.Default()
 
-	r.POST("/inquiry", handleRequest)
+	r.POST("/inquiry", handleInquiry)
+	r.POST("/notify", handleNotify)
 
 	log.Fatal(r.Run(config.Address))
 }
